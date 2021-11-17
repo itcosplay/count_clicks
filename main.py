@@ -1,9 +1,24 @@
-import os
+import argparse
 import requests
 
 from urllib.parse import urlparse
 
-BITLY_TOKEN = os.environ['BITLY_TOKEN']
+from environs import Env
+
+
+env = Env()
+env.read_env()
+
+BITLY_TOKEN = env('BITLY_TOKEN')
+
+
+def createParser ():
+    parser = argparse.ArgumentParser (
+        description='Сократим ссылку либо вернем клики по ней'
+    )
+    parser.add_argument ('link', help='Ваша ссылка')
+ 
+    return parser
 
 
 def get_url_without_scheme(url):
@@ -62,7 +77,9 @@ def is_bitlink(url, token):
 
 
 if __name__ == '__main__':
-  user_link = input('Введите ссылку\n')
+  parser = createParser()
+  namespace = parser.parse_args()
+  user_link = namespace.link
 
   try:
     if is_bitlink(user_link, BITLY_TOKEN):
