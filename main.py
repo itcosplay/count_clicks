@@ -6,12 +6,6 @@ from urllib.parse import urlparse
 from environs import Env
 
 
-env = Env()
-env.read_env()
-
-BITLY_TOKEN = env('BITLY_TOKEN')
-
-
 def createParser ():
     parser = argparse.ArgumentParser (
         description='Сократим ссылку либо вернем клики по ней'
@@ -22,10 +16,10 @@ def createParser ():
 
 
 def get_url_without_scheme(url):
-  url = urlparse(url)
-  url = f'{url.netloc}{url.path}'
+    url = urlparse(url)
+    url = f'{url.netloc}{url.path}'
 
-  return url
+    return url
 
 
 def shorten_link(long_url, token):
@@ -77,6 +71,11 @@ def is_bitlink(url, token):
 
 
 if __name__ == '__main__':
+  env = Env()
+  env.read_env()
+
+  BITLY_TOKEN = env('BITLY_TOKEN')
+
   parser = createParser()
   namespace = parser.parse_args()
   user_link = namespace.link
@@ -87,6 +86,6 @@ if __name__ == '__main__':
     
     else:
       print(shorten_link(user_link, BITLY_TOKEN))
-      
+    
   except requests.exceptions.HTTPError:
     print('Ваша ссылка не верна, попробуйте еще раз...')
