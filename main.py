@@ -74,18 +74,18 @@ if __name__ == '__main__':
   env = Env()
   env.read_env()
 
-  BITLY_TOKEN = env('BITLY_TOKEN')
+  bitly_token = env('BITLY_TOKEN')
 
   parser = createParser()
   namespace = parser.parse_args()
   user_link = namespace.link
 
   try:
-    if is_bitlink(user_link, BITLY_TOKEN):
-      print(count_clicks(user_link, BITLY_TOKEN))
+    if is_bitlink(user_link, bitly_token):
+      print(count_clicks(user_link, bitly_token))
     
     else:
-      print(shorten_link(user_link, BITLY_TOKEN))
+      print(shorten_link(user_link, bitly_token))
     
   except requests.exceptions.HTTPError:
     print('Ваша ссылка не верна, попробуйте еще раз...')
